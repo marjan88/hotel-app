@@ -27,6 +27,7 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot($router);
+        $router->model('accommodations', '\MyCompany\Accommodation\Accommodation');
     }
 
     /**
@@ -40,5 +41,6 @@ class RouteServiceProvider extends ServiceProvider
         $router->group(['namespace' => $this->namespace], function ($router) {
             require app_path('Http/routes.php');
         });
+        
     }
 }

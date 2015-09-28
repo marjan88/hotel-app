@@ -5,10 +5,10 @@ namespace MyCompany\Http\Controllers;
 use Illuminate\Http\Request;
 use MyCompany\Http\Requests;
 use MyCompany\Http\Controllers\Controller;
-use MyCompany\Commands\PlaceOnWaitingListCommand;
-use MyCompany\Events\PlacedOnWaitingList;
+use MyCompany\Accommodation\Accommodation;
+use MyCompany\Accommodation\Room;
 
-class RoomController extends Controller
+class AccommodationsRoomsController extends Controller
 {
 
     /**
@@ -37,17 +37,13 @@ class RoomController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Accommodation $accommodation)
     {
-        if ($roomAvailable) {
-            $this->dispatch(
-                    new ReserveRoomCommand($start_date, $end_date, $rooms)
-            );
-        } else {
-            $this->dispatch(
-                    new PlaceOnWaitingListCommand($start_date, $end_date, $rooms)
-            );
-        }
+        $input = \Input::json();
+        $room = new Room();
+        $room->room_number = $input->get('roomNumber');
+        $room->save();
+        $accommodation->rooms()->save($room);
     }
 
     /**
@@ -79,9 +75,10 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Accommodation $accommodation, Room $room)
     {
-        //
+        $room->accommodation()->associate($accommodation);
+        $room->save();
     }
 
     /**
@@ -93,11 +90,6 @@ class RoomController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function search()
-    {
-        json_decode(\Request::input('query'));
     }
 
 }

@@ -1,16 +1,13 @@
 <?php
 
-namespace MyCompany\Http\Controllers;
+namespace MyCompany\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use MyCompany\Http\Requests;
 use MyCompany\Http\Controllers\Controller;
-use MyCompany\Commands\PlaceOnWaitingListCommand;
-use MyCompany\Events\PlacedOnWaitingList;
 
-class RoomController extends Controller
+class UserController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +15,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        return view('user/index');
     }
 
     /**
@@ -39,15 +36,7 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        if ($roomAvailable) {
-            $this->dispatch(
-                    new ReserveRoomCommand($start_date, $end_date, $rooms)
-            );
-        } else {
-            $this->dispatch(
-                    new PlaceOnWaitingListCommand($start_date, $end_date, $rooms)
-            );
-        }
+        //
     }
 
     /**
@@ -94,10 +83,4 @@ class RoomController extends Controller
     {
         //
     }
-
-    public function search()
-    {
-        json_decode(\Request::input('query'));
-    }
-
 }

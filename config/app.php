@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -144,6 +144,8 @@ return [
         MyCompany\Providers\AuthServiceProvider::class,
         MyCompany\Providers\EventServiceProvider::class,
         MyCompany\Providers\RouteServiceProvider::class,
+        'Way\Generators\GeneratorsServiceProvider',
+'Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider',
 
     ],
 

@@ -5,10 +5,9 @@ namespace MyCompany\Http\Controllers;
 use Illuminate\Http\Request;
 use MyCompany\Http\Requests;
 use MyCompany\Http\Controllers\Controller;
-use MyCompany\Commands\PlaceOnWaitingListCommand;
-use MyCompany\Events\PlacedOnWaitingList;
+use MyCompany\Accommodation\Accommodation;
 
-class RoomController extends Controller
+class AccommodationsController extends Controller
 {
 
     /**
@@ -18,7 +17,7 @@ class RoomController extends Controller
      */
     public function index()
     {
-        //
+        return Accommodation::all();
     }
 
     /**
@@ -28,7 +27,7 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //
+       return view('accommodation/reserve');
     }
 
     /**
@@ -39,15 +38,13 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        if ($roomAvailable) {
-            $this->dispatch(
-                    new ReserveRoomCommand($start_date, $end_date, $rooms)
-            );
-        } else {
-            $this->dispatch(
-                    new PlaceOnWaitingListCommand($start_date, $end_date, $rooms)
-            );
-        }
+         $input = \Input::json();
+        $accommodation = new Accommodation;
+        $accommodation->name = $input->get('name');
+        $accommodation->description = $input->get('description');
+        $accommodation->location_id = $input->get('location_id');
+        $accommodation->save();
+        return response($accommodation, 201);
     }
 
     /**
@@ -56,9 +53,10 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Accommodation $accommodation)
     {
-        //
+
+        return $accommodation;
     }
 
     /**
@@ -81,7 +79,14 @@ class RoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input = \Input::json();
+        $accommodation = Accommodation::findOrFail($id);
+        $accommodation->name = $input->get('name');
+        $accommodation->description = $input->get('description');
+        $accommodation->location_id = $input->get('location_id');
+        $accommodation->save();
+        return response($accommodation, 200)
+                        ->header('Content-Type', 'application/json');
     }
 
     /**
@@ -93,11 +98,6 @@ class RoomController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function search()
-    {
-        json_decode(\Request::input('query'));
     }
 
 }

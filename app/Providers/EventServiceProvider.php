@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 
 class EventServiceProvider extends ServiceProvider
 {
+
     /**
      * The event listener mappings for the application.
      *
@@ -15,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         'MyCompany\Events\SomeEvent' => [
             'MyCompany\Listeners\EventListener',
+        ],
+        'MyCompany\Events\RoomWasReserved' => [
+            'MyCompany\Handlers\Events\RoomReservedEmail',
         ],
     ];
 
@@ -30,4 +34,5 @@ class EventServiceProvider extends ServiceProvider
 
         //
     }
+
 }
